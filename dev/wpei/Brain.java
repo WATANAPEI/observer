@@ -1,13 +1,13 @@
 package dev.wpei;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Brain{
-    private List<String> statusList;
+public class Brain implements BodyObserver{
+    private Map<BodyPart, String> statusList;
 
     public Brain() {
-        statusList = new ArrayList();
+        statusList = new HashMap();
     }
 
     public void reportStatus() {
@@ -15,11 +15,19 @@ public class Brain{
         if(statusList.isEmpty()) {
             System.out.println("I am ok.");
         } else {
-            statusList.forEach(e -> System.out.println("I am " + e));
+            for(Map.Entry<BodyPart, String> e: statusList.entrySet()) {
+                System.out.println("My " + e.getKey().getPartName() + " has " + e.getValue());
+            }
         }
     }
 
-    public void setStatus(String status) {
-        statusList.add(status);
+    public void setStatus(BodyPart part, String status) {
+        statusList.putIfAbsent(part, status);
+    }
+
+    @Override
+    public void onBodyStatusNotify(BodyPart part, String status) {
+        setStatus(part, status);
+        System.out.println("My " + part.getPartName() + " got " + status);
     }
 }

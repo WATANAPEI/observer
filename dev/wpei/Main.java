@@ -5,9 +5,12 @@ public class Main {
     public static void main(String[] args) {
         //construct body parts
         Brain brain = new Brain();
-        Stomach stomach = new Stomach();
-        Leg leg = new Leg();
-        BodyListener bodyListener = new BodyListener(brain);
+        BodyPart stomach = new Stomach();
+        BodyPart leg = new Leg();
+
+        //brain observe body parts
+        stomach.addObserver(brain);
+        leg.addObserver(brain);
 
 
         // report initial status
@@ -15,14 +18,13 @@ public class Main {
         stomach.reportStatus();
         leg.reportStatus();
 
-        stomach.setListener(bodyListener);
-        leg.setListener(bodyListener);
-
         //change body status
-        stomach.getPain();
-        stomach.getHungry();
+        stomach.getStatus("stomachache");
+        stomach.getStatus("hungry");
         stomach.reportStatus();
-        leg.getMusclePain();
+        leg.getStatus("muscle pain");
+        leg.reportStatus();
+
         brain.reportStatus();
     }
 }

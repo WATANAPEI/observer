@@ -3,48 +3,52 @@ package dev.wpei;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Stomach{
+public class Stomach implements BodyPart{
     private List<String> statusList;
-    private BodyListener listener;
+    private List<BodyObserver> bodyObservers;
     Stomach() {
-        statusList = new ArrayList<>();
+        statusList = new ArrayList();
+        bodyObservers = new ArrayList();
     }
 
-    Stomach(BodyListener listener) {
-        this.listener = listener;
+    @Override
+    public void addObserver(BodyObserver ob) {
+        this.bodyObservers.add(ob);
     }
 
-    public void setListener(BodyListener listener) {
-        this.listener = listener;
-    }
-
-    void reportStatus() {
+    @Override
+    public void reportStatus() {
         System.out.println("*****Stomach status*****");
         if(statusList.isEmpty()) {
             System.out.println("Stomach is ok");
         } else {
-            this.statusList.forEach(e -> System.out.println("Stomach has " + e));
+            statusList.forEach(e -> System.out.println("Stomach has " + e));
         }
     }
 
-    void getPain() {
-        statusList.add("stomachache");
-        System.out.println("Stomach got pain");
-        notifyPain();
+    @Override
+    public void getStatus(String status) {
+        statusList.add(status);
+        System.out.println("Stomach got " + status);
+        setNotification(status);
     }
 
-    void getHungry() {
-        statusList.add("Hungry");
-        System.out.println("Stomach got hungry");
-        notifyHungry();
+    protected void setNotification(String status) {
+        for(BodyObserver obs: bodyObservers) {
+            obs.onBodyStatusNotify(this, status);
+        }
     }
 
-    void notifyPain() {
-        this.listener.sendNotification("stomachache");
-    }
+//    void notifyPain() {
+//        this.listener.sendNotification("stomachache");
+//    }
+//
+//    void notifyHungry() {
+//        this.listener.sendNotification("hungry");
+//    }
 
-    void notifyHungry() {
-        this.listener.sendNotification("hungry");
+    @Override
+    public String getPartName() {
+        return "Stomach";
     }
-
 }

@@ -3,24 +3,28 @@ package dev.wpei;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Leg {
+public class Leg implements BodyPart{
     List<String> statusList;
-    BodyListener listener;
+    private List<BodyObserver> bodyObservers;
 
     public Leg() {
         statusList = new ArrayList<>();
+        bodyObservers = new ArrayList();
     }
 
-    public void setListener(BodyListener listener) {
-        this.listener = listener;
+    @Override
+    public void addObserver(BodyObserver ob) {
+        this.bodyObservers.add(ob);
     }
 
-    public void getMusclePain() {
-        statusList.add("muscle pain");
-        System.out.println("Leg got muscle pain");
-        notifyMusclePain();
+    @Override
+    public void getStatus(String status) {
+        statusList.add(status);
+        System.out.println("Leg got " + status);
+        setNotification(status);
     }
 
+    @Override
     public void reportStatus() {
         System.out.println("*****Leg status*****");
         if(statusList.isEmpty()) {
@@ -30,10 +34,15 @@ public class Leg {
         }
     }
 
-    private void notifyMusclePain() {
-        this.listener.sendNotification("muscle pain");
+    protected void setNotification(String status) {
+        for(BodyObserver obs: bodyObservers) {
+            obs.onBodyStatusNotify(this, status);
+        }
     }
 
 
-
+    @Override
+    public String getPartName() {
+        return "Leg";
+    }
 }

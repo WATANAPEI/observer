@@ -8,6 +8,6 @@ public class BodyListener {
     }
 
     void sendNotification(String status) {
-        brain.setStatus(status);
+//        brain.setStatus(status);
     }
 }

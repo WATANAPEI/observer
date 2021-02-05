@@ -1,14 +1,16 @@
 package dev.wpei;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Stomach{
-    private String status;
+    private List<String> statusList;
     private BodyListener listener;
     Stomach() {
-        this.status = "no problem";
+        statusList = new ArrayList<>();
     }
 
     Stomach(BodyListener listener) {
-        this.status = "no problem";
         this.listener = listener;
     }
 
@@ -16,18 +18,33 @@ public class Stomach{
         this.listener = listener;
     }
 
-    private void reportStatus() {
-        System.out.println("Stomach has " + this.status);
+    void reportStatus() {
+        System.out.println("*****Stomach status*****");
+        if(statusList.isEmpty()) {
+            System.out.println("Stomach is ok");
+        } else {
+            this.statusList.forEach(e -> System.out.println("Stomach has " + e));
+        }
     }
 
     void getPain() {
-        status = "stomachache";
-        reportStatus();
+        statusList.add("stomachache");
+        System.out.println("Stomach got pain");
         notifyPain();
     }
 
+    void getHungry() {
+        statusList.add("Hungry");
+        System.out.println("Stomach got hungry");
+        notifyHungry();
+    }
+
     void notifyPain() {
-        this.listener.sendNotification("Pain");
+        this.listener.sendNotification("stomachache");
+    }
+
+    void notifyHungry() {
+        this.listener.sendNotification("hungry");
     }
 
 }

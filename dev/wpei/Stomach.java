@@ -2,25 +2,32 @@ package dev.wpei;
 
 public class Stomach{
     private String status;
-    private Brain brain;
-
-    Stomach(Brain brain) {
+    private BodyListener listener;
+    Stomach() {
         this.status = "no problem";
-        this.brain = brain;
+    }
+
+    Stomach(BodyListener listener) {
+        this.status = "no problem";
+        this.listener = listener;
+    }
+
+    public void setListener(BodyListener listener) {
+        this.listener = listener;
     }
 
     private void reportStatus() {
         System.out.println("Stomach has " + this.status);
     }
 
-    void getPain(Brain brain) {
+    void getPain() {
         status = "stomachache";
         reportStatus();
-        notifyPain(brain);
+        notifyPain();
     }
 
-    void notifyPain(Brain brain) {
-        brain.setStatus("Stomachache");
+    void notifyPain() {
+        this.listener.sendNotification("Pain");
     }
 
 }

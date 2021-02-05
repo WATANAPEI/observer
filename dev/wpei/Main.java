@@ -6,8 +6,10 @@ public class Main {
 	// write your code here
         Brain brain = new Brain();
         brain.reportStatus();
-        Stomach stomach = new Stomach(brain);
-        stomach.getPain(brain);
+        Stomach stomach = new Stomach();
+        BodyListener painListener = new BodyListener(brain);
+        stomach.setListener(painListener);
+        stomach.getPain();
         brain.reportStatus();
     }
 }

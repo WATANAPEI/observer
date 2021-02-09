@@ -1,15 +1,15 @@
-type hook = () => void;
+type changeStaus = (status: string) => void;
 
 export default class Stomach {
     _status: string[] = [];
-    _observer: hook[] = []; // hook function
+    _observer: changeStaus[] = []; // hook function
     constructor(private status?: string) {
         if(status !== undefined) {
             this._status.push(status);
         }
     }
     reportStatus() {
-        //console.log(this._status.length);
+        console.log("***stomach status***")
         if(this._status.length == 0) {
             console.log(`Stomach is ok.`);
         } else {
@@ -19,23 +19,25 @@ export default class Stomach {
         }
     }
 
-    public addObserver(hook: hook) {
+    public addObserver(hook: changeStaus) {
         this._observer.push(hook);
     }
 
-    public removeObserver(hook: hook) {
+    public removeObserver(hook: changeStaus) {
         this._observer.filter(o => o != hook);
     }
 
-    private setStomachache() {
-        this._status.push("stomachache");
-        this.notify();
+    public setStomachache() {
+        console.log("***stomach got pain***")
+        const status = "stomachache";
+        this._status.push(status);
+        this.notify(status);
     }
 
     // call notify to hook registered function
-    private notify() {
+    private notify(status: string) {
         this._observer.forEach(func => {
-            func();
+            func(status);
         })
     }
 

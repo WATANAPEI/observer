@@ -11,4 +11,8 @@ export default class Brain {
         }
     }
 
+    public setStomachache = () => {
+        this._status = "stomachache";
+    }
+
 }
